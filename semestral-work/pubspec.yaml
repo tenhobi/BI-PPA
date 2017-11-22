@@ -1,0 +1,14 @@
+name: lambda_calculus
+version: 0.0.1
+description: Lambda calculus.
+author: Honza Bittner
+homepage: http://honzabittner.cz
+
+environment:
+  sdk: '>=1.0.0 <2.0.0'
+
+dependencies:
+
+dev_dependencies:
+
+transformers:

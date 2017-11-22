@@ -8,8 +8,6 @@ Yo, I am not that good, sorry for that – but it works... well, sometimes. What
 
 ## [Seminars](seminars)
 
-## [Homeworks](homeworks)
-
 ## [Semestral work](semestral-work)
 
 ## License
