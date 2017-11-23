@@ -2,7 +2,7 @@
 
 spoj(S1, [], S1).
 spoj([], S2, S2).
-spoj([X | S1], S2, [X, S3]) :- spoj(S1, S2, S3).
+spoj([X | S1], S2, [X | S3]) :- spoj(S1, S2, S3).
 
 otoc(S1, S2) :- otoc(S1, S2, []).
 otoc([], Ak, Ak).
