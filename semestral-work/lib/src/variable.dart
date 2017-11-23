@@ -1,17 +1,11 @@
 import 'package:lambda_calculus/src/expression.dart';
-import 'package:lambda_calculus/src/variable.dart';
 
-class Lambda extends Expression {
-  Variable argument;
-  Expression body;
+class Variable extends Expression {
+  String name;
 
-  Lambda(String argument, this.body) : argument = new Variable(argument) {
-    if (argument == null) {
-      throw new ArgumentError.value(argument);
-    }
-
-    if (body == null) {
-      throw new ArgumentError.value(body);
+  Variable(this.name) {
+    if (name == null || name.isEmpty) {
+      throw new ArgumentError.value(name);
     }
   }
 
