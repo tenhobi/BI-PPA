@@ -1,82 +1,92 @@
 #!/usr/bin/swipl --consult-file
 
-muz(adam).
-muz(bart).
-muz(homer).
-muz(abraham).
-muz(clancy).
-muz(nezname_dite).
+man(adam).
+man(bart).
+man(homer).
+man(abraham).
+man(clancy).
+man(unknown_child).
 
-zena(eva).
-zena(mona).
-zena(marge).
-zena(meggie).
-zena(liza).
-zena(selma).
-zena(patty).
-zena(jacqueline).
+woman(eva).
+woman(mona).
+woman(marge).
+woman(meggie).
+woman(liza).
+woman(selma).
+woman(patty).
+woman(jacqueline).
 
-%rodic(rodic, dite)
-rodic(homer, bart).
-rodic(homer, liza).
-rodic(homer, meggie).
-rodic(abraham, homer).
-rodic(marge, bart).
-rodic(marge, liza).
-rodic(marge, meggie).
-rodic(mona, homer).
-rodic(jacqueline, marge).
-rodic(jacqueline, patty).
-rodic(jacqueline, selma).
-rodic(selma, nezname_dite).
+%parent(parent, child)
+parent(homer, bart).
+parent(homer, liza).
+parent(homer, meggie).
+parent(abraham, homer).
+parent(marge, bart).
+parent(marge, liza).
+parent(marge, meggie).
+parent(mona, homer).
+parent(jacqueline, marge).
+parent(jacqueline, patty).
+parent(jacqueline, selma).
+parent(selma, unknown_child).
 
-%manzel(manzel, manzelka)
-manzel(homer, marge).
-manzel(abraham, mona).
-manzel(clancy, jacqueline).
+%husband(husband, husbandka)
+husband(homer, marge).
+husband(abraham, mona).
+husband(clancy, jacqueline).
 
-vdana(Z) :- manzel(_, Z), zena(Z).
-zenaty(M) :- manzel(M, _), muz(M).
+married_woman(Z) :- husband(_, Z), woman(Z).
+married_man(M) :- husband(M, _), man(M).
 
-matka(M, D) :- rodic(M, D), zena(M).
-otec(O, D) :- rodic(O, D), muz(O).
+matka(M, D) :- parent(M, D), woman(M).
+otec(O, D) :- parent(O, D), man(O).
 
-syn(S, R) :- rodic(R, S), muz(S).
-dcera(D, R) :- rodic(R, _), zena(D).
+syn(S, R) :- parent(R, S), man(S).
+dcera(D, R) :- parent(R, _), woman(D).
 
-sourozenci(X, Y) :- rodic(R, X), rodic(R, Y), X \= Y.
-sestra(S, X) :- sourozenci(S, X), zena(S).
-bratr(B, X) :- sourozenci(B, X), muz(B).
+siblings(X, Y) :- parent(R, X), parent(R, Y), X \= Y.
+sister(S, X) :- siblings(S, X), woman(S).
+brother(B, X) :- siblings(B, X), man(B).
 
-teta(T, X) :- rodic(R, X), sestra(T, R).
-stryc(S, X) :- rodic(R, X), bratr(S, R).
+teta(T, X) :- parent(R, X), sister(T, R).
+stryc(S, X) :- parent(R, X), brother(S, R).
 
-bratranec(B, X) :- muz(B), rodic(R1, B), rodic(R2, X), sourozenci(R1, R2).
-sestrenice(S, X) :- zena(S), rodic(R1, S), rodic(R2, X), sourozenci(R1, R2).
+cousin_man(B, X) :- man(B), parent(R1, B), parent(R2, X), siblings(R1, R2).
+cousin_woman(S, X) :- woman(S), parent(R1, S), parent(R2, X), siblings(R1, R2).
 
-tchan(T, X) :- muz(T), rodic(T, O), (manzel(O, X); manzel(X, O)).
+father_in_law(T, X) :- man(T), parent(T, O), (husband(O, X); husband(X, O)).
 
-tchan2(T, X) :- muz(T), rodic(T, O), manzel(O, X).
-tchan2(T, X) :- muz(T), rodic(T, O), manzel(X, O).
+father_in_law2(T, X) :- man(T), parent(T, O), husband(O, X).
+father_in_law2(T, X) :- man(T), parent(T, O), husband(X, O).
 
-nalezi(X, [X | _]).
-nalezi(X, [_ | R]) :- nalezi(X, R).
+% ELEMENT BELONGS IN A LIST
 
-nenalezi(_, []).
-nenalezi(X, [Y | R]) :- X \= Y, nenalezi(X, R).
+belongs(X, [X | _]).
+belongs(X, [_ | R]) :- belongs(X, R).
 
-delka([], 0).
-delka([_ | R], D) :- delka(R, D1), D is D1 + 1.
+% ELEMENT DOES NOT BELONGS IN A LIST
 
-delka2([], 0).
-delka2([X | R], D) :- is_list(X), delka2(R, D1), delka2(X, D2), D is D1 + D2.
-delka2([X | R], D) :- atomic(X), delka2(R, D1), D is D1 + 1.
+not_belongs(_, []).
+not_belongs(X, [Y | R]) :- X \= Y, not_belongs(X, R).
 
-cetnost(X, [], 0).
-cetnost(X, [Y | R], C) :- X = Y, cetnost(X, R, C1), C is C1 + 1.
-cetnost(X, [Y | R], C) :- X \= Y, cetnost(X, R, C).
+% LENGTH OF A LIST
 
-vloz(X, S, [X | S]).
+list_length([], 0).
+list_length([_ | R], D) :- list_length(R, D1), D is D1 + 1.
 
-vloz2(X, [], [X]).
-vloz2(X, [Y | S1], [Y | S2]) :- vloz2(X, S1, S2).
+list_length2([], 0).
+list_length2([X | R], D) :- is_list(X), list_length2(R, D1), list_length2(X, D2), D is D1 + D2.
+list_length2([X | R], D) :- atomic(X), list_length2(R, D1), D is D1 + 1.
+
+% FREQUENCY OF AN ELEMENT
+
+frequency(_, [], 0).
+frequency(X, [Y | R], C) :- X = Y, frequency(X, R, C1), C is C1 + 1.
+frequency(X, [Y | R], C) :- X \= Y, frequency(X, R, C).
+
+% INSERT ELEMENT TO A LIST
+
+insert(X, S, [X | S]).
+
+insert2(X, [], [X]).
+insert2(X, [Y | S1], [Y | S2]) :- insert2(X, S1, S2).

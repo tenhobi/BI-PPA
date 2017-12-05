@@ -1,5 +1,5 @@
 abstract class Expression {
-  String get representation;
+  String get textRepresentation;
 
   void detectVariables();
 
@@ -12,7 +12,5 @@ abstract class Expression {
   void evaulateApplicationally();
 
   @override
-  String toString() {
-    return representation;
-  }
+  String toString() => "$textRepresentation";
 }

@@ -40,7 +40,7 @@ class Lambda extends Expression {
     // TODO: implement evaulateNormally
   }
 
-  // TODO: implement representation
+  // TODO: implement textRepresentation
   @override
-  String get representation => null;
+  String get textRepresentation => null;
 }
